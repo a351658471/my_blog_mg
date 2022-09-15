@@ -6,7 +6,7 @@
     </el-radio-group> -->
     <el-menu
       active-text-color="#ffd04b"
-      background-color="#545c64"
+      background-color="#304156"
       default-active="2"
       text-color="#fff"
       class="el-menu-vertical"

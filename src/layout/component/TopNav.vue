@@ -22,7 +22,9 @@ const open = ref(true);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 60px;
+  height: 50px;
+  box-shadow: 0 0 1px rgba($color: #000000, $alpha: 0.2);
+  padding: 0 20px;
   .is-open-icon {
     font-size: 20px;
   }

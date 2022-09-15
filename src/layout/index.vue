@@ -2,11 +2,12 @@
   <div class="common-layout">
     <el-container>
       <el-aside width="200px">
-        <Menu/>
+        <Menu />
       </el-aside>
       <el-container>
         <el-header>
-          <TopNav/>
+          <TopNav />
+          <History />
         </el-header>
         <el-main>
           <router-view/>
@@ -18,4 +19,11 @@
 <script setup>
 import Menu from './component/Menu.vue'
 import TopNav from './component/TopNav.vue'
+import History from './component/History.vue'
 </script>
+<style lang="scss" scoped>
+:deep(.el-header){
+ padding:0;
+ height: 80px;
+}
+</style>

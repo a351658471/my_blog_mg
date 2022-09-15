@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <div>笔记管理</div>
-  </div>
+  <div>个人资料</div>
 </template>
 
 <script>

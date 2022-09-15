@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <div>笔记管理</div>
-  </div>
+  <div>item1</div>
 </template>
 
 <script>
