@@ -1,8 +1,8 @@
 <template>
   <div class="nav-bar">
     <div>
-      <el-icon class="is-open-icon" @click="open = !open"
-        ><Expand v-show="open" /><Fold v-show="!open"
+      <el-icon class="is-open-icon" @click="handleOpen"
+        ><Expand v-show="isCollapse" /><Fold v-show="!isCollapse"
       /></el-icon>
     </div>
     <div>
@@ -12,9 +12,16 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed, reactive } from "vue";
+import { useStore } from 'vuex';
 import { Expand, Fold } from "@element-plus/icons-vue";
-const open = ref(true);
+const store = useStore()
+let isCollapse =  computed(()=> {
+  return store.state.common.isCollapse
+})
+const handleOpen = ()=>{
+  store.commit('common/SET_ISCOLLAPSE',!isCollapse.value)
+}
 </script>
 
 <style lang="scss" scoped>

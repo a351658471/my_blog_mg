@@ -1,5 +1,5 @@
 const state = {
-  menuRoutes:[1,2]
+  menuRoutes:[]
 }
 
 const mutations = {

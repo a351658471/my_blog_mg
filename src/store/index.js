@@ -1,6 +1,6 @@
 import { createStore } from 'vuex'
 import routes from './modules/routes'
-
+import common from './modules/common'
 export default createStore({
   state: {
   },
@@ -9,6 +9,7 @@ export default createStore({
   actions: {
   },
   modules: {
-    routes
+    routes,
+    common
   }
 })
