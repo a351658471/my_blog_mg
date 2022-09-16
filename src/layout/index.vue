@@ -1,9 +1,7 @@
 <template>
   <div class="common-layout">
     <el-container>
-      <el-aside width="200px">
-        <Menu />
-      </el-aside>
+       <Menu />
       <el-container>
         <el-header>
           <TopNav />
@@ -26,4 +24,8 @@ import History from './component/History.vue'
  padding:0;
  height: 80px;
 }
+:deep(.el-main){
+ overflow: hidden;
+}
+
 </style>

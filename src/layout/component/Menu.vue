@@ -7,37 +7,34 @@
     <el-menu
       active-text-color="#ffd04b"
       background-color="#304156"
-      default-active="2"
+      default-active="/dashboard"
       text-color="#fff"
+      router
       class="el-menu-vertical"
       :collapse="isCollapse"
-      @select="handleSelect"
     >
-    <div v-for="item in menuList" :key="item">
+    <template v-for="item in menuList" :key="item">
       <template v-if="item.children">
         <el-sub-menu :index="item.path">
-          <template #title><el-icon><location /></el-icon><span>{{item.meta.title}}</span></template>
-          <el-menu-item v-for="itemChildren in item.children" :key="itemChildren.path" :index="itemChildren.path">{{itemChildren.meta.title}}</el-menu-item>
+          <template #title><el-icon><component :is="item.meta.icon" /></el-icon><span>{{item.meta.title}}</span></template>
+          <el-menu-item v-for="itemChildren in item.children" :key="itemChildren.path" :index="itemChildren.path">
+            <el-icon><component :is="itemChildren.meta.icon" /></el-icon>
+            <span>{{itemChildren.meta.title}}</span>
+            </el-menu-item>
         </el-sub-menu>
       </template>
       <template v-else>
         <el-menu-item :index="item.path">
-        <el-icon><icon-menu /></el-icon>
+        <el-icon><component :is="item.meta.icon" /></el-icon>
         <template #title>{{item.meta.title}}</template>
       </el-menu-item>
       </template>
-    </div>
+    </template>
     </el-menu>
   </div>
 </template>
 
 <script setup name="demo">
-import {
-  Document,
-  Menu as IconMenu,
-  Location,
-  Setting,
-} from "@element-plus/icons-vue";
 import { ref, computed  } from "vue";
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router'

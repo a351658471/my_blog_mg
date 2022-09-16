@@ -1,5 +1,5 @@
 const state = {
-    isCollapse:true
+    isCollapse:false
 }
 const mutations = {
     SET_ISCOLLAPSE: (state, value) => {
