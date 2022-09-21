@@ -56,7 +56,8 @@
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import { addNote } from '@/api/notes'
+import {ref, onMounted } from 'vue'
 const text = ref('')
 const dialogVisible = ref(false)
 const tableData = [
@@ -288,6 +289,16 @@ const mdSave = (text, html) => {
   console.log('text',text);
   console.log('html',html);
 }
+
+onMounted(() => {
+  const data = {
+    content:'#标题',
+    title:'这是title',
+    tag:'node.js'
+  }
+  addNote(data)
+})
+
 </script>
 
 <style>
