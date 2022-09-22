@@ -3,7 +3,7 @@
     <div>
       <el-button type="primary" @click="openDialog">新增笔记</el-button>
     </div>
-     <el-table :data="tableData" style="width: 100%;margin-top:20px;" class="table" border stripe>
+     <el-table :data="tableData.data" style="width: 100%;margin-top:20px;" class="table" border stripe>
       <el-table-column fixed type="selection" width="55" />
       <!-- <el-table-column  type="index" :index="indexMethod" /> -->
       <el-table-column prop="title" label="标题" width="250" />
@@ -28,11 +28,11 @@
     </el-table>
     <el-pagination
       class="paginatios"
-      v-model:currentPage="currentPage2"
-      v-model:page-size="pageSize2"
+      v-model:currentPage="tableData.currentPage"
+      v-model:page-size="tableData.pageSize"
       :background="background"
       layout="sizes, prev, pager, next"
-      :total="1000"
+      :total="tableData.total"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
@@ -58,16 +58,18 @@
 <script setup>
 import { addNote, getNotes } from '@/api/notes'
 import {ref, onMounted, reactive } from 'vue'
-const tableOption  = reactive({
-  page:1,
-  pageSize:10,
-  total:0
-})
 const text = ref('')
 const dialogVisible = ref(false)
-let tableData = reactive([])
-const currentPage2 = ref(5)
-const pageSize2 = ref(30)
+const arr = reactive([])
+const tableData = reactive(
+  {
+    data:[],
+    page:1,
+    pageSize:10,
+    total:0,
+    currentPage:1
+  }
+)
 const small = ref(false)
 const background = ref(true)
 const disabled = ref(false)
@@ -86,16 +88,16 @@ const mdSave = (text, html) => {
   console.log('html',html);
 }
 const  getList =async ()=>{
-  const {page, pageSize} = tableOption
+  const {page, pageSize} = tableData
   const params = {
     page,
     pageSize,
   }
   const {code, result, total} =await getNotes(params)
   if(code ===0){
-    tableData = reactive(result)
+    tableData.data = result
     console.log(tableData);
-    tableOption.total = total
+    tableData.total = total
   }
 }
 
