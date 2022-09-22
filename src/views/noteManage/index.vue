@@ -6,12 +6,12 @@
      <el-table :data="tableData" style="width: 100%;margin-top:20px;" class="table" border stripe>
       <el-table-column fixed type="selection" width="55" />
       <!-- <el-table-column  type="index" :index="indexMethod" /> -->
-      <el-table-column prop="date" label="Date" width="250" />
-      <el-table-column prop="name" label="Name" width="150" />
-      <el-table-column prop="state" label="State" width="120" />
-      <el-table-column prop="city" label="City" width="320" />
-      <el-table-column prop="address" label="Address" />
-      <el-table-column prop="zip" label="Zip" />
+      <el-table-column prop="title" label="标题" width="250" />
+      <el-table-column prop="cover" label="封面" width="150" />
+      <el-table-column prop="describe" label="描述" width="120" />
+      <el-table-column prop="tag" label="标签" width="320" />
+      <el-table-column prop="comment" label="评论数" />
+      <el-table-column prop="views" label="浏览量" />
       <el-table-column align="center" label="操作">
       <template  #default="scope">
         <el-button size="small" @click="handleEdit(scope.$index, scope.row)"
@@ -56,220 +56,16 @@
 </template>
 
 <script setup>
-import { addNote } from '@/api/notes'
-import {ref, onMounted } from 'vue'
+import { addNote, getNotes } from '@/api/notes'
+import {ref, onMounted, reactive } from 'vue'
+const tableOption  = reactive({
+  page:1,
+  pageSize:10,
+  total:0
+})
 const text = ref('')
 const dialogVisible = ref(false)
-const tableData = [
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-02',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-04',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-08',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-06',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-  {
-    date: '2016-05-07',
-    name: 'Tom',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-  },
-]
+let tableData = reactive([])
 const currentPage2 = ref(5)
 const pageSize2 = ref(30)
 const small = ref(false)
@@ -289,14 +85,22 @@ const mdSave = (text, html) => {
   console.log('text',text);
   console.log('html',html);
 }
+const  getList =async ()=>{
+  const {page, pageSize} = tableOption
+  const params = {
+    page,
+    pageSize,
+  }
+  const {code, result, total} =await getNotes(params)
+  if(code ===0){
+    tableData = reactive(result)
+    console.log(tableData);
+    tableOption.total = total
+  }
+}
 
 onMounted(() => {
-  const data = {
-    content:'#标题',
-    title:'这是title',
-    tag:'node.js'
-  }
-  addNote(data)
+  getList()
 })
 
 </script>
