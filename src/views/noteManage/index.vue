@@ -59,8 +59,8 @@
         </el-form-item>
         <el-form-item label="封面">
           <el-upload
+            action=""
             class="avatar-uploader"
-            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
             :show-file-list="false"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
@@ -93,13 +93,14 @@
 
 <script setup>
 import { addNote, getNotes, editNote, deleteNote } from "@/api/notes";
+import { uploadImg } from "@/api/upload";
 import { ref, onMounted, reactive } from "vue";
 import { ElMessage, ElMessageBox } from 'element-plus'
 const formRef = ref(null)
 let formData = reactive({
   obj:{
     title:'',
-    cover:'',
+    cover:'http://127.0.0.1:3000/public/images/1663941502225.png',
     tag:'',
     describe:'',
     content:''
@@ -139,7 +140,7 @@ const handleCurrentChange = (val) => {
 const openDialog = () => {
   formData.obj = {
       title:'',
-      cover:'',
+      cover:'http://127.0.0.1:3000/public/images/1663941502225.png',
       tag:'',
       describe:'',
       content:''
@@ -163,7 +164,11 @@ const getList = async () => {
   }
 };
 const handleAvatarSuccess = ()=>{}
-const beforeAvatarUpload = ()=>{}
+const beforeAvatarUpload = (file)=>{
+  const obj = new FormData()
+  obj.append('files', file)
+  uploadImg(obj)
+}
 const handleEdit = (val)=>{
   formData.obj = val
   dialogVisible.value = true
