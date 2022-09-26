@@ -47,7 +47,7 @@
       :title="formData.obj.id?'编辑笔记':'新增笔记'"
       width="60%"
     >
-      <el-form class="form" :model="formData.obj" :rules="formRules" ref="formRef">
+      <el-form class="form" :model="formData.obj" :rules="formRules" ref="formRef" label-width="80px">
         <el-form-item label="标题" prop="title">
           <el-input style="width: 450px" v-model="formData.obj.title"></el-input>
         </el-form-item>
@@ -59,9 +59,10 @@
         </el-form-item>
         <el-form-item label="封面">
           <el-upload
-            action=""
+            action="/api/upload/uploadImg"
             class="avatar-uploader"
             :show-file-list="false"
+            name="files"
             :on-success="handleAvatarSuccess"
             :before-upload="beforeAvatarUpload"
           >
@@ -100,7 +101,7 @@ const formRef = ref(null)
 let formData = reactive({
   obj:{
     title:'',
-    cover:'http://127.0.0.1:3000/public/images/1663941502225.png',
+    cover:'',
     tag:'',
     describe:'',
     content:''
@@ -140,7 +141,7 @@ const handleCurrentChange = (val) => {
 const openDialog = () => {
   formData.obj = {
       title:'',
-      cover:'http://127.0.0.1:3000/public/images/1663941502225.png',
+      cover:'',
       tag:'',
       describe:'',
       content:''
@@ -163,11 +164,19 @@ const getList = async () => {
     tableData.total = total;
   }
 };
-const handleAvatarSuccess = ()=>{}
+const handleAvatarSuccess = (res)=>{
+  formData.obj.cover = res.url
+}
 const beforeAvatarUpload = (file)=>{
-  const obj = new FormData()
-  obj.append('files', file)
-  uploadImg(obj)
+  const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpg'
+  const isLt2M = file.size / 1024 / 1024 < 3
+  if (!isJPG) {
+    this.$message.error('图片只能是 JPG/JPEG/PNG/GIF 等格式!')
+  }
+  if (!isLt2M) {
+    this.$message.error('图片大小不能超过 3MB!')
+  }
+  return isJPG && isLt2M
 }
 const handleEdit = (val)=>{
   formData.obj = val

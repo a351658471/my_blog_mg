@@ -1,13 +1,13 @@
 <template>
     <el-row :gutter="24" style="width:100%">
-      <el-col :span="12" v-for="item in exList" :key="item">
+      <el-col :span="12" v-for="(item,index) in exList" :key="item">
         <el-card shadow="hover">
           <div class="card-header">
             <div>{{item.title}}</div>
             <div style="font-size: 20px">
-              <View style="width: 1em; height: 1em; margin-right: 8px"  @click="handleView"/>
-              <Edit style="width: 1em; height: 1em; margin-right: 8px" @click="handleEdit"/>
-              <Delete style="width: 1em; height: 1em; margin-right: 8px" @click="handleDelete" />
+              <!-- <View style="width: 1em; height: 1em; margin-right: 8px"  @click="handleView(item)"/> -->
+              <Edit style="width: 1em; height: 1em; margin-right: 8px" @click="handleEdit(item,index)"/>
+              <Delete style="width: 1em; height: 1em; margin-right: 8px" @click="handleDelete(type,index)" />
             </div>
           </div>
         </el-card>
@@ -34,7 +34,7 @@
           <template #footer>
             <span class="dialog-footer">
               <el-button @click="dialogVisible = false">Cancel</el-button>
-              <el-button type="primary" @click="dialogVisible = false"
+              <el-button type="primary" @click="handleExConfirm(type, exForm)"
                 >Confirm</el-button
               >
             </span>
@@ -44,12 +44,15 @@
 </template>
 
 <script setup>
-import {reactive, ref} from 'vue'
+import {reactive, ref, inject} from 'vue'
+const handleDelete = inject('handleDelete')
+const handleExConfirm = inject('handleExConfirm')
 const props = defineProps({
   exList:{
     type:Array,
     default:()=>([])
-  }
+  },
+  type:String
 })
 const dialogVisible = ref(false)
 const exForm = reactive({
@@ -60,15 +63,19 @@ const exForm = reactive({
   }
 })
 const openAddDialog= ()=> {
+  exForm.data = {
+    title:'',
+    secondTitle:'',
+    content:''
+  }
   dialogVisible.value = true
 }
 const handleView= ()=>{
   dialogVisible.value = true
 }
-const handleDelete= () => {
-  console.log('handleDelete');
-}
-const handleEdit= () => {
+const handleEdit= (source,index) => {
+  exForm.data = {...source}
+  exForm.data.index = index
   dialogVisible.value = true
 }
 </script>
