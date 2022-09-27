@@ -46,6 +46,7 @@
 </template>
 
 <script setup>
+import {getProfile, saveProfile} from '@/api/profile'
 import {ref, nextTick, reactive, provide} from 'vue'
 import ExCard from './components/ExCard.vue'
 const openAddDialog = () => {}
