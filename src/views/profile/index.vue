@@ -38,7 +38,8 @@
     </el-form>
     </div>
     <div class="save-box">
-    <el-button type="primary" @click="handleSave">保存</el-button>
+      <el-button @click="apiGetProfile">重置</el-button>
+      <el-button type="primary" @click="handleSave">保存</el-button>
   </div>
   </div>
   
@@ -47,35 +48,19 @@
 
 <script setup>
 import {getProfile, saveProfile} from '@/api/profile'
-import {ref, nextTick, reactive, provide} from 'vue'
+import {ref, nextTick, reactive, provide, onMounted} from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import ExCard from './components/ExCard.vue'
 const openAddDialog = () => {}
 const inputValue = ref('')
 const inputVisible = ref(false)
 const InputRef = ref()
 const infoObj = reactive({
+  id:0,
   intor:'',
-  exList:[
-    {
-      title:'厦门工学院-本科1',
-      secondTitle:'2015.09 - 2019.06',
-      content:'hahahahh'
-    },
-    {
-      title:'厦门工学院-本科2',
-      secondTitle:'2015.09 - 2019.06',
-      content:'xixixixi'
-    }
-  ],
-  workList:[
-    {
-      title:'xx世纪科技有限公司',
-      secondTitle:'前端开发',
-      content:'xxxxxxxxxxxxxx'
-    }
-  ],
-  tagList:['vue.js','node.js','react.js'],
-  skillList:[]
+  exList:[],
+  workList:[],
+  tagList:[]
 })
 const handleClose = (tag) => {
   infoObj.tagList.splice(infoObj.tagList.indexOf(tag), 1)
@@ -96,23 +81,75 @@ const handleInputConfirm = () => {
   inputValue.value = ''
 }
 const handleDelete = (key,index) => {
-  infoObj[key].splice(index,1)
+   ElMessageBox.confirm(
+    '确认删除此数据?',
+    '提示',
+    {
+      confirmButtonText: '确认',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      infoObj[key].splice(index,1)
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '取消删除',
+      })
+    })
+  
 }
 provide('handleDelete',handleDelete)
 const handleExConfirm = (key,exForm)=>{
   const {data:{ title, secondTitle, content, index}}  = exForm
-  console.log('index',index);
   if(index != undefined){
     infoObj[key][index] = {title, secondTitle, content}
   }else{
     const obj = {title, secondTitle, content}
     infoObj[key].push(obj)
   }
+  exForm.data.dialogVisible = false
 }
 provide('handleExConfirm',handleExConfirm)
 const handleSave= ()=> {
-  console.log(infoObj);
+  const { exList, intor, tagList, workList, id} = infoObj
+  const data = {
+    id,
+    exList:JSON.stringify(exList),
+    workList:JSON.stringify(workList),
+    tagList:JSON.stringify(tagList),
+    intor,
+    
+  }
+  apiSaveProfile(data)
+
 }
+const apiSaveProfile = async(data) =>{
+  const {code, msg} = await saveProfile(data)
+  let type = code ===0?'success':'error'
+  ElMessage ({
+    message: msg,
+    type,
+  })
+}
+
+const apiGetProfile = async() => {
+  const { code, result } = await getProfile()
+  if(code === 0){
+    const { id, intor, tagList, exList, workList} = result[0]
+    infoObj.id = id
+    infoObj.intor = intor
+    infoObj.exList = JSON.parse(exList)
+    infoObj.tagList = JSON.parse(tagList)
+    infoObj.workList = JSON.parse(workList)
+  }
+}
+
+onMounted(()=> {
+  apiGetProfile()
+})
 </script>
 
 <style>

@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-export function saveProfile (){
+export function saveProfile (data){
   return request({
     url:'/profile/saveProfile',
     method:'post',
@@ -10,6 +10,7 @@ export function saveProfile (){
 
 export function getProfile() {
   return request({
-    url:'profile/getProfile'
+    url:'profile/getProfile',
+    method:'get'
   })
 }

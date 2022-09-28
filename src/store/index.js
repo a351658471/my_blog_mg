@@ -9,9 +9,9 @@ export default createStore({
   },
   actions: {
   },
+  getters,
   modules: {
     routes,
-    common,
-    getters
+    common
   }
 })

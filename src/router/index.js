@@ -3,8 +3,7 @@ import Layout from '../layout/index.vue'
 const Dashboard = ()=> import('@/views/dashboard')
 const NoteManage = ()=> import('@/views/noteManage')
 const Profile = ()=> import('@/views/profile')
-const Item1 = ()=> import('@/views/group/item1')
-const Item2 = ()=> import('@/views/group/item2')
+const SkillManage = ()=> import('@/views/skillManage')
 import store from '../store/index'
 
 const routes = [
@@ -28,21 +27,10 @@ const routes = [
 				component:Profile,
 				meta: { title: '个人信息', icon: 'UserFilled' }
 			},
-			{
-				path:'/group',
-				meta: { title: 'Menu1', icon: 'List' },
-				children:[
-					{
-						path:'item1',
-						component:Item1,
-						meta: { title: 'Item1', icon: 'Memo' }
-					},
-					{
-						path:'item2',
-						component:Item2,
-						meta: { title: 'Item2', icon: 'Memo' }
-					},
-				],
+      {
+				path:'/skillManage',
+				component:SkillManage,
+				meta: { title: '技能管理', icon: 'Flag' }
 			},
 		],
 	},

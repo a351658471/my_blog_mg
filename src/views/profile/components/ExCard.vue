@@ -1,7 +1,7 @@
 <template>
     <el-row :gutter="24" style="width:100%">
       <el-col :span="12" v-for="(item,index) in exList" :key="item">
-        <el-card shadow="hover">
+        <el-card shadow="hover" style="margin-bottom:10px">
           <div class="card-header">
             <div>{{item.title}}</div>
             <div style="font-size: 20px">
@@ -16,7 +16,7 @@
         <el-button type="primary" style="margin-top:10px" @click="openAddDialog">添加经历</el-button>
       </el-col>
        <el-dialog
-          v-model="dialogVisible"
+          v-model="exForm.data.dialogVisible"
           title="经历"
           width="40%"
         >
@@ -33,7 +33,7 @@
           </el-form>
           <template #footer>
             <span class="dialog-footer">
-              <el-button @click="dialogVisible = false">Cancel</el-button>
+              <el-button @click="exForm.data.dialogVisible = false">Cancel</el-button>
               <el-button type="primary" @click="handleExConfirm(type, exForm)"
                 >Confirm</el-button
               >
@@ -54,12 +54,12 @@ const props = defineProps({
   },
   type:String
 })
-const dialogVisible = ref(false)
 const exForm = reactive({
   data:{
     title:'',
     secondTitle:'',
-    content:''
+    content:'',
+    
   }
 })
 const openAddDialog= ()=> {
@@ -68,15 +68,15 @@ const openAddDialog= ()=> {
     secondTitle:'',
     content:''
   }
-  dialogVisible.value = true
+  exForm.data.dialogVisible = true
 }
 const handleView= ()=>{
-  dialogVisible.value = true
+  exForm.data.dialogVisible = true
 }
 const handleEdit= (source,index) => {
   exForm.data = {...source}
   exForm.data.index = index
-  dialogVisible.value = true
+  exForm.data.dialogVisible = true
 }
 </script>
 

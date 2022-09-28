@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <el-button type="primary" @click="openDialog">新增笔记</el-button>
+      <el-button type="primary" @click="openDialog">添加技能</el-button>
     </div>
     <el-table
       :data="tableData.data"
@@ -14,10 +14,7 @@
       <el-table-column prop="title" label="标题" />
       <el-table-column prop="cover" label="封面" />
       <el-table-column prop="describe" label="描述" />
-      <el-table-column prop="tag" label="标签" width="150" />
-      <el-table-column prop="comment" label="评论数" width="150"/>
-      <el-table-column prop="views" label="浏览量" width="150" />
-      <el-table-column prop="createTime" label="创建时间" width="250" />
+      <el-table-column prop="proficiency" label="熟练度" width="150" />
       <el-table-column align="center" label="操作"  width="250">
         <template #default="scope">
           <el-button size="small" @click="handleEdit(scope.row)"
@@ -44,15 +41,12 @@
     />
     <el-dialog
       v-model="dialogVisible"
-      :title="formData.obj.id?'编辑笔记':'新增笔记'"
+      :title="formData.obj.id?'编辑技能':'新增技能'"
       width="60%"
     >
       <el-form class="form" :model="formData.obj" :rules="formRules" ref="formRef" label-width="80px">
         <el-form-item label="标题" prop="title">
           <el-input style="width: 450px" v-model="formData.obj.title"></el-input>
-        </el-form-item>
-        <el-form-item label="标签" prop="tag">
-          <el-input style="width: 450px" v-model="formData.obj.tag"></el-input>
         </el-form-item>
         <el-form-item label="描述" prop="describe">
           <el-input style="width: 450px" v-model="formData.obj.describe"></el-input>
@@ -70,13 +64,8 @@
             <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
           </el-upload>
         </el-form-item>
-        <el-form-item label="内容" prop="content">
-          <v-md-editor
-            v-model="formData.obj.content"
-            style="width:100%"
-            height="400px"
-            @save="mdSave"
-          ></v-md-editor>
+        <el-form-item label="熟练度" prop="proficiency">
+          <el-rate v-model="formData.obj.proficiency" allow-half />
         </el-form-item>
       </el-form>
 
@@ -93,7 +82,7 @@
 </template>
 
 <script setup>
-import { addNote, getNotes, editNote, deleteNote } from "@/api/notes";
+import { saveSkill, getSkills, deleteSkill} from "@/api/skills";
 import { uploadImg } from "@/api/upload";
 import { ref, onMounted, reactive } from "vue";
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -102,16 +91,12 @@ let formData = reactive({
   obj:{
     title:'',
     cover:'',
-    tag:'',
     describe:'',
-    content:''
+    proficiency:0
   }
 })
 const formRules = reactive({
   title:[
-    { required: true, message: '请输入', trigger: 'blur' },
-  ],
-  tag:[
     { required: true, message: '请输入', trigger: 'blur' },
   ],
   describe:[
@@ -142,9 +127,8 @@ const openDialog = () => {
   formData.obj = {
       title:'',
       cover:'',
-      tag:'',
       describe:'',
-      content:''
+      proficiency:0
     }
   dialogVisible.value = true;
 };
@@ -158,7 +142,7 @@ const getList = async () => {
     page,
     pageSize,
   };
-  const { code, result, total } = await getNotes(params);
+  const { code, result, total } = await getSkills(params);
   if (code === 0) {
     tableData.data = result;
     tableData.total = total;
@@ -205,12 +189,13 @@ const handleDelete = (id)=>{
 const handleSave = () =>{
   formRef.value.validate((valid) => {
     if(valid){
-      saveNote()
+      // console.log(formData.obj);
+      apiSaveSkill()
     } 
   })
 }
 const deleteConfirm = async(id) =>{
-  const {code, msg } =await deleteNote(id)
+  const {code, msg } =await deleteSkill(id)
   let type = 'error'
   if(code == 0){
     type = 'success'
@@ -221,13 +206,8 @@ const deleteConfirm = async(id) =>{
     type,
   })
 }
-const saveNote = async () => {
-  let data = null
-  if(formData.obj.id){
-    data = await editNote(formData.obj)
-  }else{
-    data = await addNote (formData.obj)
-  }
+const apiSaveSkill = async () => {
+  const data = await saveSkill(formData.obj)
   const {code,msg} = data
   let type ='error'
   if(code ==0){

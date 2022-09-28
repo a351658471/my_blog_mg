@@ -1,17 +1,14 @@
 <template>
   <div>
-    <!-- <el-radio-group v-model="isCollapse" style="margin-bottom: 20px">
-      <el-radio-button :label="false">expand</el-radio-button>
-      <el-radio-button :label="true">collapse</el-radio-button>
-    </el-radio-group> -->
     <el-menu
       active-text-color="#ffd04b"
       background-color="#304156"
-      default-active="/dashboard"
+      :default-active="defaultActive"
       text-color="#fff"
       router
       class="el-menu-vertical"
       :collapse="isCollapse"
+      @select="handleSelect"
     >
     <template v-for="item in menuList" :key="item">
       <template v-if="item.children">
@@ -35,11 +32,12 @@
 </template>
 
 <script setup name="demo">
-import { ref, computed  } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router'
 const store = useStore()
 const router = useRouter()
+const defaultActive = ref(router.currentRoute.value.fullPath)
 const isCollapse =  computed(()=> {
   return store.state.common.isCollapse
 })
@@ -47,14 +45,23 @@ const menuList = computed(()=> {
   const routes = store.state.routes.menuRoutes.children
   return routes
 })
+const historyRoutes = computed(()=> {
+  return store.getters.historyRoutes
+})
 const handleSelect = (key, keyPath) => {
+  console.log('key',key);
+  console.log('keyPath',keyPath);
   let path = ''
   if(keyPath.length == 1){
     path = key
   }else{
     path = keyPath.join('/')
   }
-  router.push(path)
+  const params = {
+    type:0,
+    route:path
+  }
+  store.commit('routes/SET_HROUTES',params)
 };
 </script>
 
