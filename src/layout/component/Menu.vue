@@ -3,12 +3,11 @@
     <el-menu
       active-text-color="#ffd04b"
       background-color="#304156"
-      :default-active="defaultActive"
+      :default-active="active"
       text-color="#fff"
       router
       class="el-menu-vertical"
       :collapse="isCollapse"
-      @select="handleSelect"
     >
     <template v-for="item in menuList" :key="item">
       <template v-if="item.children">
@@ -32,12 +31,14 @@
 </template>
 
 <script setup name="demo">
-import { ref, computed } from "vue";
+import { ref, computed, nextTick } from "vue";
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router'
 const store = useStore()
 const router = useRouter()
-const defaultActive = ref(router.currentRoute.value.fullPath)
+const active = computed(()=>{
+  return router.currentRoute.value.fullPath
+})
 const isCollapse =  computed(()=> {
   return store.state.common.isCollapse
 })
@@ -45,24 +46,8 @@ const menuList = computed(()=> {
   const routes = store.state.routes.menuRoutes.children
   return routes
 })
-const historyRoutes = computed(()=> {
-  return store.getters.historyRoutes
-})
-const handleSelect = (key, keyPath) => {
-  console.log('key',key);
-  console.log('keyPath',keyPath);
-  let path = ''
-  if(keyPath.length == 1){
-    path = key
-  }else{
-    path = keyPath.join('/')
-  }
-  const params = {
-    type:0,
-    route:path
-  }
-  store.commit('routes/SET_HROUTES',params)
-};
+
+
 </script>
 
 <style>

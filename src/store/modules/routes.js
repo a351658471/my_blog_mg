@@ -8,7 +8,8 @@ const mutations = {
     state.menuRoutes = routes
   },
   SET_HROUTES:(state, {route, type}) => {
-    const index = state.historyRoutes.indexOf(route)
+    const index = state.historyRoutes.findIndex(item => item.path === route.path)
+    console.log('index',index);
     if(type === 0 && index===-1){
       if(index === -1)state.historyRoutes.push(route)
     }else if(type ===1){

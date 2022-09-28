@@ -1,11 +1,12 @@
 <template>
   <div class="history">
     <el-tag
-      v-for="item in history"
+      v-for="item in historyRoutes"
       :key="item.name"
       type="success"
-      class="mx-1"
+      class="mx-1 tag"
       closable
+      @click="tagClick(item)"
       @close="handleClose(item)"
       :effect="current===item.path?'dark':'plain'"
     >
@@ -15,14 +16,40 @@
 </template>
 
 <script setup>
-import { reactive, ref } from "vue";
-const current = ref('1')
-const arr = [{name:'页面1',path:'1'},{name:'页面2',path:'2'},{name:'页面3',path:'3'}]
-const history = reactive(arr)
-const handleClose = (item)=> {
-  const index = history.indexOf(item)
-  history.splice(index,1)
+import { reactive, ref, computed, watch } from "vue";
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router'
+const store = useStore()
+const router = useRouter()
+const historyRoutes = computed(()=> {
+  return store.getters.historyRoutes
+})
+const current = computed(()=> {
+  return router.currentRoute.value.fullPath
+})
+const handleClose = (route)=> {
+  const params = {
+    type:1,
+    route
+  }
+  store.commit('routes/SET_HROUTES',params)
 }
+const tagClick = (route)=>{
+  console.log(route);
+  router.push(route.path)
+}
+watch(router.currentRoute,(nValue,lValue)=>{
+    const route = {
+      path:nValue.fullPath,
+      name:nValue.meta.title
+    }
+    const params = {
+      type:0,
+      route
+    }
+    store.commit('routes/SET_HROUTES',params)
+  
+},{immediate:true})
 </script>
 
 <style lang="scss" scoped>
@@ -34,5 +61,8 @@ const handleClose = (item)=> {
 }
 .mx-1{
   margin-right: 10px;
+}
+.tag{
+  cursor: pointer;
 }
 </style>
