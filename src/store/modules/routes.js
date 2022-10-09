@@ -1,6 +1,11 @@
 const state = {
   menuRoutes:[],
-  historyRoutes:[]
+  historyRoutes:[
+    {
+      path:'/dashboard',
+      name:'首页'
+    }
+  ]
 }
 
 const mutations = {
@@ -9,7 +14,6 @@ const mutations = {
   },
   SET_HROUTES:(state, {route, type}) => {
     const index = state.historyRoutes.findIndex(item => item.path === route.path)
-    console.log('index',index);
     if(type === 0 && index===-1){
       if(index === -1)state.historyRoutes.push(route)
     }else if(type ===1){

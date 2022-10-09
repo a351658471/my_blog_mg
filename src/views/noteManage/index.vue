@@ -168,14 +168,22 @@ const handleAvatarSuccess = (res)=>{
   formData.obj.cover = res.url
 }
 const beforeAvatarUpload = (file)=>{
-  const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpg'
-  const isLt2M = file.size / 1024 / 1024 < 3
+  console.log('111111111111');
+  const isJPG = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/gif' || file.type === 'image/jpg' || file.type ==='image/webp'
+  const isLt2M = file.size / 1024 / 1024 < 10
   if (!isJPG) {
-    this.$message.error('图片只能是 JPG/JPEG/PNG/GIF 等格式!')
+    ElMessage({
+        type: 'error',
+        message: '图片只能是 JPG/JPEG/PNG/GIF 等格式!',
+      })
   }
   if (!isLt2M) {
-    this.$message.error('图片大小不能超过 3MB!')
+    ElMessage({
+        type: 'error',
+        message: '图片大小不能超过 3MB!',
+      })
   }
+  
   return isJPG && isLt2M
 }
 const handleEdit = (val)=>{

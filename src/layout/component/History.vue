@@ -28,14 +28,17 @@ const current = computed(()=> {
   return router.currentRoute.value.fullPath
 })
 const handleClose = (route)=> {
+  if(route.path === '/dashboard')return
   const params = {
     type:1,
     route
   }
   store.commit('routes/SET_HROUTES',params)
+  if(route.path === current.value){
+    router.push(historyRoutes.value[historyRoutes.value.length-1].path)
+  }
 }
 const tagClick = (route)=>{
-  console.log(route);
   router.push(route.path)
 }
 watch(router.currentRoute,(nValue,lValue)=>{
