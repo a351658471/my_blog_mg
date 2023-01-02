@@ -4,6 +4,7 @@ const Dashboard = ()=> import('@/views/dashboard')
 const NoteManage = ()=> import('@/views/noteManage')
 const Profile = ()=> import('@/views/profile')
 const SkillManage = ()=> import('@/views/skillManage')
+const Login = ()=> import('@/views/login.vue')
 import store from '../store/index'
 
 const routes = [
@@ -34,6 +35,10 @@ const routes = [
 			},
 		],
 	},
+  {
+    path:'/login',
+    component:Login
+  }
 ]
 store.commit('routes/SET_MENUROUTES', routes[0])
 const router = createRouter({

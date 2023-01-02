@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { ElMessageBox , ElMessage  } from 'element-plus'
 import store from '@/store'
-
+import router from '@/router';
 const service = axios.create({
     baseURL: process.env.VUE_APP_BASE_API,
     timeout: 5000
@@ -9,9 +9,9 @@ const service = axios.create({
 
 service.interceptors.request.use(
     config => {
-        // if(store.getters.token){
-        //     config.headers['Authorization'] = store.getters.token
-        // }
+        if(store.getters.token){
+            config.headers['Authorization'] ='bearer '+ store.getters.token
+        }
         return config
     },
     error => {
@@ -22,9 +22,12 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     response => {
         const res = response.data
+        console.log('res',res);
         if (res.code === 0) {
           return Promise.resolve(res)
-        } else {
+        } else if(res.code === 401){
+          return router.replace('/login')
+        }else {
           return Promise.reject(response.data)
         }
       },
