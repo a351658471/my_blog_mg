@@ -16,6 +16,14 @@ export function getNotes(params) {
   })
 }
 
+export function article(params) {
+  return request({
+    url:'/notes/queryNotes',
+    method:'get',
+    params,
+  })
+}
+
 export function deleteNote(params) {
   return request({
     url:`/notes/deleteNote/${params}`,
