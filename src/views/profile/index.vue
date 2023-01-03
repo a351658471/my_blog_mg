@@ -136,9 +136,9 @@ const apiSaveProfile = async(data) =>{
 }
 
 const apiGetProfile = async() => {
-  const { code, result } = await getProfile()
-  if(code === 0){
-    const { id, intor, tagList, exList, workList} = result[0]
+  const data = await getProfile()
+  if(data?.code === 0 && data.result.length!=0){
+    const { id, intor, tagList, exList, workList} = data.result[0]
     infoObj.id = id
     infoObj.intor = intor
     infoObj.exList = JSON.parse(exList)

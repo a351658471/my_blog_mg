@@ -1,6 +1,7 @@
 import { createStore } from 'vuex'
 import routes from './modules/routes'
 import common from './modules/common'
+import user from './modules/user'
 import getters from './getters'
 export default createStore({
   state: {
@@ -11,7 +12,8 @@ export default createStore({
   },
   getters,
   modules: {
+    user,
     routes,
-    common
+    common,
   }
 })
